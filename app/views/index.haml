@@ -4,11 +4,19 @@
 %link{ :href => "bootstrap/css/bootstrap.min.css", :rel => "stylesheet" }/
 %script{ :src => "javascripts/jq.js" }
 %script{ :src => "bootstrap/js/bootstrap.min.js" }
+%script{ :src => "javascripts/script.js" }
 
 .container
   %h1 xlsx → txt converter
   %form#file_form{ :action => "/convert", :method => "post", :enctype=>"multipart/form-data" }
     %label
       xlsx file:
-      %input{ :type => "file", :name => "original_file" }/
+    .files
+      %input{ :type => "file", :name => "original_file[]" }/
+    %button.btn.add_file +
     %button.btn-success.submit Convert
+
+:javascript
+  window.addEventListener( "DOMContentLoaded", function() {
+    bind_add_file();
+  }, false );

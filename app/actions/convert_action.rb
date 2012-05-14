@@ -1,26 +1,39 @@
 class ConvertAction < Cramp::Action
 
   def respond_with
-    filename = request.params[ "original_file" ][ :filename ] rescue nil
-    halt( 412, {}, "File name expected" ) if filename.nil?
-    basename = File.basename( filename, File.extname( filename ) )
+    files = request.params[ "original_file" ] rescue nil
+    halt( 412, {}, "File name expected" ) if files.nil? || !files.any?
+    @@basename = Time.now.to_i
     [ 200, {
-      "Content-type" => "text/plain; charset=utf-8",
-      "Content-Disposition" => "attachment;filename=#{basename}.txt"
+      "Content-type" => "application/zip",
+      "Content-Disposition" => "attachment;filename=#{@@basename}.zip"
     }]
   end
 
   def start
-    file = request.params[ "original_file" ]
-    if !file.nil?
-      file_path = file[ :tempfile ].to_path
-      file_ext = File.extname( file[ :filename ] )
-      new_path = "#{file_path}#{file_ext}"
-      system( "cp #{file_path} #{new_path}" )
-      xls = Excelx.new( "#{new_path}" )
-      @@csv_path = "#{file_path}.csv"
-      xls.to_csv( @@csv_path )
-      render File.open( @@csv_path ).read.gsub( "\"", "" )
+    files = request.params[ "original_file" ]
+    tmp_path = "#{Xlsx2txt::Application.root}/tmp/"
+    folder_name = "#{tmp_path}/#{@@basename}"
+    archive_name = "#{@@basename}.zip"
+    Dir.mkdir( folder_name )
+    if !files.nil? && files.any?
+      files.each do |file|
+        file_path = file[ :tempfile ].to_path
+        file_ext = File.extname( file[ :filename ] )
+        file_name = File.basename( file[ :filename ], file_ext )
+        new_path = "#{file_path}#{file_ext}"
+        system( "cp #{file_path} #{new_path}" )
+        xls = Excelx.new( "#{new_path}" )
+        xls.to_csv( "#{folder_name}/#{file_name}.txt" )
+        f = File.open( "#{folder_name}/#{file_name}.txt", "r+" )
+        data = f.read.gsub( /\"/, "" )
+        f.truncate( 0 )
+        f.write( data )
+        f.close
+      end
+      Dir.chdir( tmp_path )
+      system "zip -q -1 -r #{archive_name} #{@@basename}"
+      render File.open( archive_name ).read
     end
     finish
   end

@@ -1,3 +1,5 @@
+#encoding: utf-8
+
 require "rubygems"
 require "bundler"
 
@@ -28,3 +30,5 @@ Bundler.require(:default, Xlsx2txt::Application.env)
 
 # Preload application classes
 Dir['./app/**/*.rb'].each {|f| require f}
+
+Excelx::FORMATS[ "[$-FC19]dd\\ mmmm\\ yyyy\\ \\г\\.;@" ] = :date
