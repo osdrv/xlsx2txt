@@ -21,6 +21,7 @@ module Xlsx2txt
 
     # Initialize the application
     def self.initialize!
+      Encoding.default_external = 'utf-8'
     end
 
   end
