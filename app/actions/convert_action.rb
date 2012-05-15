@@ -34,6 +34,7 @@ class ConvertAction < Cramp::Action
       Dir.chdir( tmp_path )
       system "zip -q -1 -r #{archive_name} #{@@basename}"
       render File.open( archive_name ).read
+      Dir.rmdir( tmp_path )
     end
     finish
   end
