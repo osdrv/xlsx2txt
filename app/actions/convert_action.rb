@@ -1,3 +1,7 @@
+#encoding: utf-8
+
+require "fileutils"
+
 class ConvertAction < Cramp::Action
 
   def respond_with
@@ -23,18 +27,19 @@ class ConvertAction < Cramp::Action
         file_name = File.basename( file[ :filename ], file_ext )
         new_path = "#{file_path}#{file_ext}"
         system( "cp #{file_path} #{new_path}" )
-        xls = Excelx.new( "#{new_path}" )
+        xls = Roo::Spreadsheet.open( "#{new_path}" )
         xls.to_csv( "#{folder_name}/#{file_name}.txt" )
         f = File.open( "#{folder_name}/#{file_name}.txt", "r+" )
         data = f.read.gsub( /\"/, "" )
         f.truncate( 0 )
+        f.pos = 0
         f.write( data )
         f.close
       end
       Dir.chdir( tmp_path )
       system "zip -q -1 -r #{archive_name} #{@@basename}"
       render File.open( archive_name ).read
-      Dir.rmdir( tmp_path )
+      FileUtils.rm_rf folder_name
     end
     finish
   end
