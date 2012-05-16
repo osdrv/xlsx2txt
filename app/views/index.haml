@@ -8,11 +8,11 @@
 
 .container
   %h1 xlsx → txt converter
-  %form#file_form{ :action => "/convert", :method => "post", :enctype=>"multipart/form-data" }
+  %form#file_form{ :action => "/convert", :method => "post", :enctype => "multipart/form-data" }
     %label
       xlsx file:
     .files
-      %input{ :type => "file", :name => "original_file[]" }/
+      %input{ :type => "file", :name => "original_file[]", :multiple => "multiple" }/
     %button.btn.add_file +
     %button.btn-success.submit Convert
 
