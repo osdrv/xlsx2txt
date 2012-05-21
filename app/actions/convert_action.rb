@@ -1,6 +1,7 @@
 #encoding: utf-8
 
 require "fileutils"
+require "iconv"
 
 class ConvertAction < Cramp::Action
 
@@ -30,7 +31,8 @@ class ConvertAction < Cramp::Action
         xls = Roo::Spreadsheet.open( "#{new_path}" )
         xls.to_csv( "#{folder_name}/#{file_name}.txt" )
         f = File.open( "#{folder_name}/#{file_name}.txt", "r+" )
-        data = f.read.gsub( /\"/, "" )
+        data = f.read.gsub( /\"/, "" ).gsub(/\n/, "\r\n" )
+        data = Iconv.conv( "UTF-16", "UTF-8", data )
         f.truncate( 0 )
         f.pos = 0
         f.write( data )
