@@ -6,6 +6,8 @@ gem "haml", "~> 3.1.5"
 
 gem "roo", "~> 1.10.1"
 
+gem "russian", "~> 0.6.0"
+
 # Async webserver for running a cramp application
 gem 'thin'
 

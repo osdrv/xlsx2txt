@@ -2,6 +2,7 @@
 
 require "rubygems"
 require "bundler"
+require "i18n"
 
 module Xlsx2txt
   class Application
@@ -29,7 +30,11 @@ end
 
 Bundler.require(:default, Xlsx2txt::Application.env)
 
+Dir['./lib/**/*.rb'].each {|f| require f}
+
 # Preload application classes
 Dir['./app/**/*.rb'].each {|f| require f}
 
 Excelx::FORMATS[ "[$-FC19]dd\\ mmmm\\ yyyy\\ \\г\\.;@" ] = :date
+
+Russian::init_i18n
