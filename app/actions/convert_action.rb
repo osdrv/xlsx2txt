@@ -23,7 +23,7 @@ class ConvertAction < Cramp::Action
         data = f.read.gsub( /\"/, "" ).gsub(/\n/, "\r\n" )
         data.scan( /\d{4}\-\d{2}\-\d{2}/ ).each do |date|
           time = Time.parse( date )
-          data = data.gsub( date, Russian.strftime( time, "%d %B %Yг." ) )
+          data = data.gsub( date, Russian.strftime( time, "%d %B %Y г." ) )
         end
         data = Iconv.conv( "UTF-16", "UTF-8", data )
         f.truncate( 0 )
