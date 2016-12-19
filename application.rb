@@ -35,6 +35,6 @@ Dir['./lib/**/*.rb'].each {|f| require f}
 # Preload application classes
 Dir['./app/**/*.rb'].each {|f| require f}
 
-Excelx::FORMATS[ "[$-FC19]dd\\ mmmm\\ yyyy\\ \\г\\.;@" ] = :date
+# Roo::Excelx::EXCEPTIONAL_FORMATS[ "[$-FC19]dd\\ mmmm\\ yyyy\\ \\г\\.;@" ] = :date
 
 Russian::init_i18n

@@ -1,13 +1,11 @@
 require './application'
 Xlsx2txt::Application.initialize!
+use AsyncRack::CommonLogger
 
 # Development middlewares
 if Xlsx2txt::Application.env == 'development'
-  use AsyncRack::CommonLogger
-
   # Enable code reloading on every request
   use Rack::Reloader, 0
-
   # Serve assets from /public
   use Rack::Static, :urls => [ "/javascripts", "/bootstrap" ], :root => Xlsx2txt::Application.root(:public)
 end
