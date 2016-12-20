@@ -1,4 +1,4 @@
-FROM whitebox/ruby:2.3.3-alpine
+FROM whiteboxio/ruby:2.3.3-alpine
 ADD Gemfile /app/
 ADD Gemfile.lock /app/
 RUN apk --update add --virtual build-dependencies libstdc++ ruby-dev build-base g++ musl-dev make && \  
